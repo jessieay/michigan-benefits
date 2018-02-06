@@ -76,44 +76,30 @@ class StepNavigation
   delegate :steps, to: :class
 
   def initialize(step_instance_or_class)
-    @step =
-      if step_instance_or_class.is_a?(Class)
-        step_instance_or_class
-      else
-        step_instance_or_class.class
-      end
+
+    @controller = step_instance_or_class
   end
 
   def next
-    step_at(1)
-  end
-
-  def skip
-    step_at(2)
+    steps_until_end = steps[index+1..-1]
+    steps_until_end.find do |controller_class|
+      !controller_class.skip?(@controller.current_application)
+    end
   end
 
   def previous
-    step_at(-1)
+    steps_to_beginning = steps[0..index-1].reverse
+    steps_to_beginning.find do |controller_class|
+      !controller_class.skip?(@controller.current_application)
+    end
   end
 
   def index
-    steps.index(@step)
+    steps.index(@controller.class)
   end
 
   def parent
-    self.class.new(SUBSTEPS[@step])
+    self.class.new(SUBSTEPS[@controller.class])
   end
 
-  private
-
-  def step_at(increment)
-    if index
-      new_index = index + increment
-      new_index = nil if new_index.negative? || new_index >= steps.length
-    else
-      new_index = parent.index
-    end
-
-    steps.at(new_index) if new_index
-  end
 end

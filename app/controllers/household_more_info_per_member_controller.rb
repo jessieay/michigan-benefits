@@ -11,6 +11,10 @@ class HouseholdMoreInfoPerMemberController < ManyMemberStepsController
     end
   end
 
+  def self.skip?(current_application)
+    no_additional_info_needed?(current_application)
+  end
+
   private
 
   def update_application
@@ -39,11 +43,7 @@ class HouseholdMoreInfoPerMemberController < ManyMemberStepsController
     %i[citizen disabled new_mom in_college living_elsewhere]
   end
 
-  def skip?
-    no_additional_info_needed?
-  end
-
-  def no_additional_info_needed?
+  def self.no_additional_info_needed?(current_application)
     current_application.everyone_a_citizen? &&
       !current_application.anyone_disabled? &&
       !current_application.anyone_new_mom? &&

@@ -2,7 +2,7 @@ class StepsController < ApplicationController
   layout "step"
 
   before_action :ensure_application_present, only: %i(edit index update)
-  before_action :maybe_skip, only: :edit
+  #before_action :maybe_skip, only: :edit
 
   helper_method :decoded_step_path
   helper_method :application_title
@@ -65,6 +65,10 @@ class StepsController < ApplicationController
     MedicaidApplication.find_by(id: session[:medicaid_application_id])
   end
 
+  def self.skip?(current_application)
+    false
+  end
+
   private
 
   delegate :step_class, to: :class
@@ -79,9 +83,6 @@ class StepsController < ApplicationController
     HashWithIndifferentAccess.new(current_application&.attributes)
   end
 
-  def skip?
-    false
-  end
 
   # Probably don't redefine me
 
