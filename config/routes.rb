@@ -66,5 +66,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get "/intro", to: "intro#edit", as: :intro_edit
+  put "/intro", to: "intro#update", as: :intro_update
+
   get "/styleguide", to: "styleguides#index"
 end
