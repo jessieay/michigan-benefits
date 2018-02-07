@@ -12,6 +12,14 @@ class HouseholdAddMemberController < SnapStepsController
     end
   end
 
+  def next_path(*args)
+    household_members_overview_steps_path(args)
+  end
+
+  def previous_path(*args)
+    household_members_overview_steps_path(args)
+  end
+
   private
 
   def existing_attributes

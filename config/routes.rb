@@ -46,13 +46,19 @@ Rails.application.routes.draw do
 
   resources :steps, only: %i[index show] do
     collection do
-      StepNavigation.steps_and_substeps.each do |controller_class|
+      StepNavigation.steps.each do |controller_class|
         { get: :edit, put: :update }.each do |method, action|
           match "/#{controller_class.to_param}",
             action: action,
             controller: controller_class.controller_path,
             via: method
         end
+      end
+      { get: :edit, put: :update }.each do |method, action|
+        match "/household-add-member",
+              action: action,
+              controller: 'household_add_member',
+              via: method
       end
 
       Medicaid::StepNavigation.steps_and_substeps.each do |controller_class|
