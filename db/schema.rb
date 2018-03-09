@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305192048) do
+ActiveRecord::Schema.define(version: 20180308214556) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "addresses", force: :cascade do |t|
@@ -64,6 +65,27 @@ ActiveRecord::Schema.define(version: 20180305192048) do
     t.boolean "resides_in_state", default: true
     t.datetime "updated_at", null: false
     t.index ["common_application_id"], name: "index_application_navigators_on_common_application_id"
+  end
+
+  create_table "apps", id: :serial, force: :cascade do |t|
+    t.boolean "accepts_text_messages"
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "first_name"
+    t.string "home_address"
+    t.string "home_city"
+    t.string "home_zip"
+    t.string "last_name"
+    t.boolean "mailing_address_same_as_home_address"
+    t.string "mailing_city"
+    t.string "mailing_street"
+    t.string "mailing_zip"
+    t.string "phone_number"
+    t.string "signature"
+    t.boolean "unstable_housing", default: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_apps_on_user_id"
   end
 
   create_table "common_applications", force: :cascade do |t|
@@ -149,6 +171,7 @@ ActiveRecord::Schema.define(version: 20180305192048) do
     t.string "first_name"
     t.string "last_name"
     t.integer "relationship", default: 0
+    t.integer "requesting_food", default: 0
     t.integer "sex", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["common_application_id"], name: "index_household_members_on_common_application_id"
@@ -323,6 +346,18 @@ ActiveRecord::Schema.define(version: 20180305192048) do
     t.boolean "vehicle_income"
   end
 
+  create_table "users", id: :serial, force: :cascade do |t|
+    t.boolean "admin", default: false, null: false
+    t.datetime "created_at"
+    t.string "crypted_password"
+    t.string "email", null: false
+    t.string "name"
+    t.string "salt"
+    t.datetime "updated_at"
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
+  add_foreign_key "apps", "users"
   add_foreign_key "driver_applications", "snap_applications"
   add_foreign_key "driver_errors", "driver_applications"
 end
