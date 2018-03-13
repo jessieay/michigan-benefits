@@ -13,6 +13,11 @@ class CommonApplication < ApplicationRecord
     foreign_key: "common_application_id",
     dependent: :destroy
 
+  has_one :snap_supplement, dependent: :destroy
+  has_many :snap_members,
+    through: :snap_supplement,
+    source: :members
+
   enum previously_received_assistance: { unfilled: 0, yes: 1, no: 2 },
        _prefix: :previously_received_assistance
 
