@@ -58,6 +58,15 @@ RSpec.describe Integrated::IntroduceYourselfController do
           expect(primary_member.birthday).to eq(DateTime.new(1950, 1, 31))
           expect(primary_member.relationship).to eq("primary")
         end
+
+        it "indicates that member is seeking food assistance" do
+          put :update, params: valid_params
+
+          current_app = CommonApplication.find(session[:current_application_id])
+
+          primary_member = current_app.primary_member
+          expect(primary_member.requesting_food).to eq("yes")
+        end
       end
 
       context "with a current application" do
