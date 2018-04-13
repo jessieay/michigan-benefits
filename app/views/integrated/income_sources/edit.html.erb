@@ -1,0 +1,16 @@
+<% content_for :header_title, "Income" %>
+<% content_for :form_card_title, t(".title", **member_appropriate_translation_data) %>
+
+<% content_for :form_card_body do %>
+  <%= fields_for(:form, @form, builder: MbFormBuilder) do |f| %>
+    <%= f.hidden_field :id %>
+
+    <fieldset class="input-group">
+      <legend class="sr-only" id="income_sources">
+        <%= t(".title", **member_appropriate_translation_data) %>
+      </legend>
+
+      <%= f.collection_check_boxes(:incomes, @form.incomes, :income_type, :income_label) %>
+    </fieldset>
+  <% end %>
+<% end %>

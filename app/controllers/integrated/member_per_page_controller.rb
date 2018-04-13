@@ -1,5 +1,6 @@
 module Integrated
   class MemberPerPageController < FormsController
+    helper_method :current_member
     helper_method :member_appropriate_translation_data
 
     def update_models

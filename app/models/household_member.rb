@@ -1,5 +1,6 @@
 class HouseholdMember < ApplicationRecord
   belongs_to :common_application
+  has_many :incomes
 
   scope :requesting_food, -> {
     where(requesting_food: "yes").order("created_at")
